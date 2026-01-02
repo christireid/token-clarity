@@ -1,0 +1,111 @@
+{
+  "name": "@token-optimizer/core",
+  "version": "0.1.0",
+  "description": "Core utilities for AI token optimization - tokenization, budgets, caching, and cost estimation",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./tokenizers": {
+      "import": {
+        "types": "./dist/tokenizers/index.d.ts",
+        "default": "./dist/tokenizers/index.js"
+      },
+      "require": {
+        "types": "./dist/tokenizers/index.d.cts",
+        "default": "./dist/tokenizers/index.cjs"
+      }
+    },
+    "./budget": {
+      "import": {
+        "types": "./dist/budget/index.d.ts",
+        "default": "./dist/budget/index.js"
+      },
+      "require": {
+        "types": "./dist/budget/index.d.cts",
+        "default": "./dist/budget/index.cjs"
+      }
+    },
+    "./cost": {
+      "import": {
+        "types": "./dist/cost/index.d.ts",
+        "default": "./dist/cost/index.js"
+      },
+      "require": {
+        "types": "./dist/cost/index.d.cts",
+        "default": "./dist/cost/index.cjs"
+      }
+    },
+    "./compression": {
+      "import": {
+        "types": "./dist/compression/index.d.ts",
+        "default": "./dist/compression/index.js"
+      },
+      "require": {
+        "types": "./dist/compression/index.d.cts",
+        "default": "./dist/compression/index.cjs"
+      }
+    },
+    "./providers": {
+      "import": {
+        "types": "./dist/providers/index.d.ts",
+        "default": "./dist/providers/index.js"
+      },
+      "require": {
+        "types": "./dist/providers/index.d.cts",
+        "default": "./dist/providers/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "clean": "rimraf dist",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "gpt-tokenizer": "^2.1.2",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "gpt-tokenizer": ">=2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "gpt-tokenizer": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "ai",
+    "llm",
+    "token",
+    "tokenizer",
+    "openai",
+    "anthropic",
+    "gemini",
+    "gpt",
+    "claude",
+    "cost",
+    "optimization",
+    "budget"
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "name": "@token-optimizer/react",
+  "version": "0.1.0",
+  "description": "React hooks for AI token optimization - budgets, costs, caching, and prompt optimization",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./hooks": {
+      "import": {
+        "types": "./dist/hooks/index.d.ts",
+        "default": "./dist/hooks/index.js"
+      },
+      "require": {
+        "types": "./dist/hooks/index.d.cts",
+        "default": "./dist/hooks/index.cjs"
+      }
+    },
+    "./context": {
+      "import": {
+        "types": "./dist/context/index.d.ts",
+        "default": "./dist/context/index.js"
+      },
+      "require": {
+        "types": "./dist/context/index.d.cts",
+        "default": "./dist/context/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "clean": "rimraf dist",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@token-optimizer/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.52",
+    "react": "^18.2.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "ai",
+    "llm",
+    "token",
+    "openai",
+    "anthropic",
+    "cost",
+    "optimization",
+    "budget"
+  ]
+}

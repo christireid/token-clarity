@@ -1,0 +1,197 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm typecheck
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        if: always()
+        with:
+          files: ./coverage/coverage-final.json
+          fail_ci_if_error: false
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: |
+            packages/*/dist
+          retention-days: 7
+
+  size:
+    name: Bundle Size
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Check bundle sizes
+        run: |
+          echo "Checking bundle sizes..."
+
+          # Core package
+          CORE_SIZE=$(gzip -c packages/core/dist/index.js 2>/dev/null | wc -c || echo "0")
+          echo "Core: ${CORE_SIZE} bytes gzipped"
+
+          # React package
+          REACT_SIZE=$(gzip -c packages/react/dist/index.js 2>/dev/null | wc -c || echo "0")
+          echo "React: ${REACT_SIZE} bytes gzipped"
+
+          # Semantic cache package
+          CACHE_SIZE=$(gzip -c packages/semantic-cache/dist/index.js 2>/dev/null | wc -c || echo "0")
+          echo "Semantic Cache: ${CACHE_SIZE} bytes gzipped"
+
+          # Check limits (in bytes)
+          # Core: 10KB = 10240 bytes
+          # React: 5KB = 5120 bytes
+          # Semantic Cache: 15KB = 15360 bytes
+
+          if [ "$CORE_SIZE" -gt 10240 ]; then
+            echo "ERROR: Core bundle exceeds 10KB limit (${CORE_SIZE} bytes)"
+            exit 1
+          fi
+
+          if [ "$REACT_SIZE" -gt 5120 ]; then
+            echo "ERROR: React bundle exceeds 5KB limit (${REACT_SIZE} bytes)"
+            exit 1
+          fi
+
+          if [ "$CACHE_SIZE" -gt 15360 ]; then
+            echo "ERROR: Semantic cache bundle exceeds 15KB limit (${CACHE_SIZE} bytes)"
+            exit 1
+          fi
+
+          echo "All bundle size checks passed!"
+
+  publish-dry-run:
+    name: Publish (Dry Run)
+    runs-on: ubuntu-latest
+    needs: [lint, typecheck, test, build]
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Publish dry run
+        run: pnpm publish -r --dry-run --no-git-checks
