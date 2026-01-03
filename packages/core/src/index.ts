@@ -153,3 +153,42 @@ export {
   summarizeHistory,
   slidingWindowContext,
 } from './compression/index.js';
+
+// Provider Adapters
+export type {
+  ProviderAdapter,
+  ProviderCapabilities,
+  TokenUsage as AdapterTokenUsage,
+  CostEstimate as AdapterCostEstimate,
+  ModelPricing as AdapterModelPricing,
+  NormalizedResponse,
+  CountOptions,
+  ProviderMessage,
+  OpenAIMessage as AdapterOpenAIMessage,
+  AnthropicMessage as AdapterAnthropicMessage,
+  GoogleMessage as AdapterGoogleMessage,
+  BedrockMessage,
+  GenericMessage,
+  AdapterRegistry,
+  ExtendedProvider,
+} from './adapters/index.js';
+
+export {
+  BaseAdapter,
+  OpenAIAdapter,
+  AnthropicAdapter,
+  GoogleAdapter,
+  AzureAdapter,
+  BedrockAdapter,
+  createOpenAIAdapter,
+  createAnthropicAdapter,
+  createGoogleAdapter,
+  createAzureAdapter,
+  createBedrockAdapter,
+  createExtendedAdapter,
+  getAdapter,
+  getAdapterRegistry,
+  registerAdapter,
+  getSupportedProviders,
+  isProviderSupported,
+} from './adapters/index.js';
