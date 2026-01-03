@@ -73,6 +73,12 @@ export {
   type RequestStats,
 } from './hooks/useOptimizedChat.js';
 
+export {
+  useDevtools,
+  type UseDevtoolsOptions,
+  type UseDevtoolsReturn,
+} from './hooks/useDevtools.js';
+
 // Context
 export {
   TokenOptimizerContext,
@@ -82,3 +88,13 @@ export {
   type TokenOptimizerContextValue,
   type TokenOptimizerProviderProps,
 } from './context/TokenOptimizerContext.js';
+
+// Components
+export {
+  TokenDevtoolsPanel,
+  type TokenDevtoolsPanelProps,
+  type DevtoolsRequestEntry,
+  type DevtoolsMetrics,
+  type DevtoolsPanelPosition,
+  type DevtoolsTab,
+} from './components/TokenDevtoolsPanel.js';

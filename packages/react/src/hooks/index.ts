@@ -27,3 +27,9 @@ export {
   type UseOptimizedChatReturn,
   type RequestStats,
 } from './useOptimizedChat.js';
+
+export {
+  useDevtools,
+  type UseDevtoolsOptions,
+  type UseDevtoolsReturn,
+} from './useDevtools.js';

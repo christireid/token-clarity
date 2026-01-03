@@ -37,6 +37,16 @@
         "types": "./dist/context/index.d.cts",
         "default": "./dist/context/index.cjs"
       }
+    },
+    "./components": {
+      "import": {
+        "types": "./dist/components/index.d.ts",
+        "default": "./dist/components/index.js"
+      },
+      "require": {
+        "types": "./dist/components/index.d.cts",
+        "default": "./dist/components/index.cjs"
+      }
     }
   },
   "files": [
