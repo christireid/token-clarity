@@ -105,20 +105,20 @@ describe('createBudgetManager', () => {
 
   it('should trim messages to fit budget', () => {
     const manager = createBudgetManager({
-      maxInputTokens: 100,
-      maxOutputTokens: 50,
+      maxInputTokens: 50,  // Small budget to force trimming
+      maxOutputTokens: 20,
     });
 
     const messages: ChatMessage[] = [
-      { role: 'system', content: 'You are helpful.' },
-      { role: 'user', content: 'First message with some content here.' },
-      { role: 'assistant', content: 'First response with some content.' },
-      { role: 'user', content: 'Second message with more content.' },
-      { role: 'assistant', content: 'Second response with more content.' },
-      { role: 'user', content: 'Third message.' },
+      { role: 'system', content: 'You are a helpful assistant that provides detailed responses.' },
+      { role: 'user', content: 'First message with some content here that takes up more space.' },
+      { role: 'assistant', content: 'First response with some detailed content that is longer.' },
+      { role: 'user', content: 'Second message with additional content that should be trimmed.' },
+      { role: 'assistant', content: 'Second response with even more content to fill up the budget.' },
+      { role: 'user', content: 'Third and final message from the user.' },
     ];
 
-    const result = manager.trimToFit(messages, { reserveForOutput: 50 });
+    const result = manager.trimToFit(messages, { reserveForOutput: 20 });
 
     expect(result.messages.length).toBeLessThanOrEqual(messages.length);
     // System message should be preserved

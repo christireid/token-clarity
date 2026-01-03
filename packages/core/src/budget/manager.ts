@@ -5,7 +5,7 @@
 
 import type { ChatMessage } from '../types/index.js';
 import type { Tokenizer } from '../tokenizers/types.js';
-import { estimateTokens, estimateChatTokens } from '../tokenizers/estimation.js';
+import { estimateChatTokens } from '../tokenizers/estimation.js';
 import type {
   TokenBudget,
   BudgetStatus,
@@ -101,13 +101,6 @@ export function createBudgetManager(
     ...DEFAULT_BUDGET,
     ...budget,
   };
-
-  /**
-   * Count tokens using tokenizer or estimation
-   */
-  function countTokens(text: string): number {
-    return tokenizer?.count(text) ?? estimateTokens(text);
-  }
 
   /**
    * Count tokens for chat messages

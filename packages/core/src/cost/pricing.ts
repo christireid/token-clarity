@@ -238,7 +238,6 @@ export function calculatePotentialSavings(
   const maxSavings = fullCost - discountedCost;
 
   const expectedSavings = maxSavings * cacheHitRate;
-  const savingsPercentage = (expectedSavings / fullCost) * 100;
 
   return {
     savingsPerRequest: expectedSavings,

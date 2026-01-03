@@ -223,7 +223,7 @@ export function useOptimizedChat(options: UseOptimizedChatOptions): UseOptimized
           messageContent
         );
         const providerRequest = promptOptimizer.toProviderRequest(optimizedPrompt);
-        requestBody = providerRequest as Record<string, unknown>;
+        requestBody = providerRequest as unknown as Record<string, unknown>;
       } else {
         requestBody = { messages: optimizedMessages };
       }

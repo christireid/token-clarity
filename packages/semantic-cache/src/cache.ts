@@ -93,42 +93,45 @@ export async function createSemanticCache(
   let totalSimilarity = 0;
   let similarityCount = 0;
 
+  // Extract get function for reuse in getMany
+  async function get(query: string): Promise<CacheResult> {
+    // Generate embedding for query
+    const queryEmbedding = await embedder.embed(query);
+
+    // Get all entries and find most similar
+    const entries = await storage.getAll();
+    const match = findMostSimilar(queryEmbedding, entries, similarityThreshold);
+
+    if (match) {
+      hits++;
+      totalSimilarity += match.similarity;
+      similarityCount++;
+
+      const saved = match.entry.metadata.tokens.input + match.entry.metadata.tokens.output;
+      tokensSaved += saved;
+
+      const costEstimate = estimateCost(
+        match.entry.metadata.model,
+        match.entry.metadata.tokens.input,
+        match.entry.metadata.tokens.output
+      );
+      costSaved += costEstimate.totalCost;
+
+      return {
+        hit: true,
+        entry: match.entry,
+        similarity: match.similarity,
+        savedTokens: saved,
+        savedCost: costEstimate.totalCost,
+      };
+    }
+
+    misses++;
+    return { hit: false };
+  }
+
   return {
-    async get(query: string): Promise<CacheResult> {
-      // Generate embedding for query
-      const queryEmbedding = await embedder.embed(query);
-
-      // Get all entries and find most similar
-      const entries = await storage.getAll();
-      const match = findMostSimilar(queryEmbedding, entries, similarityThreshold);
-
-      if (match) {
-        hits++;
-        totalSimilarity += match.similarity;
-        similarityCount++;
-
-        const saved = match.entry.metadata.tokens.input + match.entry.metadata.tokens.output;
-        tokensSaved += saved;
-
-        const costEstimate = estimateCost(
-          match.entry.metadata.model,
-          match.entry.metadata.tokens.input,
-          match.entry.metadata.tokens.output
-        );
-        costSaved += costEstimate.totalCost;
-
-        return {
-          hit: true,
-          entry: match.entry,
-          similarity: match.similarity,
-          savedTokens: saved,
-          savedCost: costEstimate.totalCost,
-        };
-      }
-
-      misses++;
-      return { hit: false };
-    },
+    get,
 
     async set(
       query: string,
@@ -171,7 +174,7 @@ export async function createSemanticCache(
       const results: CacheResult[] = [];
 
       for (const query of queries) {
-        results.push(await this.get(query));
+        results.push(await get(query));
       }
 
       return results;

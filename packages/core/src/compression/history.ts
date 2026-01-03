@@ -227,14 +227,19 @@ export function summarizeHistory(
     0
   );
 
-  const recentMessages = conversationMessages.slice(-preserveRecent);
+  // Handle special case where preserveRecent is 0 (slice(-0) = slice(0) = whole array)
+  const recentMessages = preserveRecent > 0
+    ? conversationMessages.slice(-preserveRecent)
+    : [];
   const recentTokens = recentMessages.reduce(
     (sum, m) => sum + estimateTokens(m.content) + 4,
     0
   );
 
   // Messages to summarize
-  const toSummarize = conversationMessages.slice(0, -preserveRecent);
+  const toSummarize = preserveRecent > 0
+    ? conversationMessages.slice(0, -preserveRecent)
+    : conversationMessages;
 
   if (toSummarize.length === 0) {
     return {

@@ -3,7 +3,7 @@
  * Type definitions for provider-specific optimizations
  */
 
-import type { ChatMessage, Provider, Tool } from '../types/index.js';
+import type { ChatMessage, Provider } from '../types/index.js';
 
 /**
  * Prompt segment for cache optimization

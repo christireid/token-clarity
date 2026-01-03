@@ -52,7 +52,7 @@ export async function createTransformersEmbedder(): Promise<Embedder> {
             extractor(text, { pooling: 'mean', normalize: true })
           )
         );
-        results.push(...outputs.map((o: { data: ArrayLike<number> }) => Array.from(o.data)));
+        results.push(...outputs.map((o) => Array.from(o.data as Float32Array)));
       }
 
       return results;

@@ -3,7 +3,7 @@
  * React hook for tracking API costs
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import {
   createUsageTracker,
   estimateCost,

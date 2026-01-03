@@ -3,7 +3,7 @@
  * Build cache-optimized prompts for different AI providers
  */
 
-import type { ChatMessage, Provider } from '../types/index.js';
+import type { ChatMessage } from '../types/index.js';
 import type {
   PromptSegment,
   CacheOptimizedPrompt,
@@ -155,7 +155,7 @@ export function buildCacheAlignedPrompt(
   }));
 
   // Optionally merge small adjacent cacheable segments
-  let processedSegments = segmentsWithTokens;
+  let processedSegments: PromptSegment[] = segmentsWithTokens;
   if (mergeSmallSegments) {
     processedSegments = mergeSmallCacheableSegments(
       segmentsWithTokens,
@@ -269,14 +269,24 @@ function mergePendingSegments(
 ): PromptSegment {
   const content = segments.map(s => s.content).join('\n\n');
   const types = [...new Set(segments.map(s => s.type))];
-  const type = types.length === 1 ? types[0]! : 'context';
+  // Choose highest priority type (lowest TYPE_ORDER value)
+  const type = types.length === 1
+    ? types[0]!
+    : types.reduce((best, t) => (TYPE_ORDER[t] < TYPE_ORDER[best] ? t : best));
+
+  // Determine highest priority from segments
+  const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+  const priority = segments.reduce((best, s) =>
+    priorityOrder[s.priority] < priorityOrder[best] ? s.priority : best,
+    'low' as PromptSegment['priority']
+  );
 
   return {
     id: `merged-${segments.map(s => s.id).join('-')}`,
     type,
     content,
     cacheable: true,
-    priority: 'high',
+    priority,
     tokens: totalTokens,
   };
 }
