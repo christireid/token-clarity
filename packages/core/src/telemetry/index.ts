@@ -61,6 +61,8 @@ export {
   createTelemetryCollector,
   getTelemetryCollector,
   setGlobalTelemetryCollector,
+  resetGlobalTelemetryCollector,
+  createRequestScopedCollector,
 } from './collector.js';
 
 // Exporters

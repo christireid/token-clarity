@@ -23,3 +23,17 @@ export {
 } from './pricing.js';
 
 export { createUsageTracker } from './tracker.js';
+
+// Remote pricing
+export type {
+  PricingSource,
+  RemotePricingOptions,
+  PricingStorage,
+} from './remote-pricing.js';
+
+export {
+  RemotePricingFetcher,
+  getRemotePricingFetcher,
+  initializeRemotePricing,
+  refreshPricing,
+} from './remote-pricing.js';

@@ -634,22 +634,82 @@ export function createTelemetryCollector(
   return new TelemetryCollector(config);
 }
 
-// Global singleton collector
-let globalCollector: TelemetryCollector | null = null;
+// SSR-safe global singleton collector
+// Uses globalThis for cross-environment compatibility
+const GLOBAL_KEY = '__TOKEN_OPTIMIZER_TELEMETRY__' as const;
+
+/**
+ * Check if running on server
+ */
+function isServer(): boolean {
+  return typeof window === 'undefined';
+}
+
+/**
+ * Get collector storage based on environment
+ */
+function getGlobalStorage(): { collector: TelemetryCollector | null } {
+  // Use globalThis for universal access
+  const storage = globalThis as unknown as {
+    [GLOBAL_KEY]?: { collector: TelemetryCollector | null };
+  };
+
+  if (!storage[GLOBAL_KEY]) {
+    storage[GLOBAL_KEY] = { collector: null };
+  }
+
+  return storage[GLOBAL_KEY]!;
+}
 
 /**
  * Get the global telemetry collector
+ *
+ * Note: On the server, be cautious about using the global collector
+ * as it may be shared between requests. Consider using per-request
+ * collectors via `createTelemetryCollector()` for SSR applications.
  */
 export function getTelemetryCollector(): TelemetryCollector {
-  if (!globalCollector) {
-    globalCollector = new TelemetryCollector();
+  const storage = getGlobalStorage();
+
+  if (!storage.collector) {
+    storage.collector = new TelemetryCollector({
+      // Disable flush timer on server by default
+      flushInterval: isServer() ? 0 : 5000,
+    });
   }
-  return globalCollector;
+
+  return storage.collector;
 }
 
 /**
  * Set the global telemetry collector
  */
 export function setGlobalTelemetryCollector(collector: TelemetryCollector): void {
-  globalCollector = collector;
+  const storage = getGlobalStorage();
+  storage.collector = collector;
+}
+
+/**
+ * Reset the global telemetry collector
+ * Useful for testing or when request isolation is needed
+ */
+export function resetGlobalTelemetryCollector(): void {
+  const storage = getGlobalStorage();
+  if (storage.collector) {
+    storage.collector.shutdown();
+  }
+  storage.collector = null;
+}
+
+/**
+ * Create a request-scoped telemetry collector
+ * Recommended for SSR applications to prevent data leakage between requests
+ */
+export function createRequestScopedCollector(
+  config?: Partial<TelemetryConfig>
+): TelemetryCollector {
+  return new TelemetryCollector({
+    flushInterval: 0, // No auto-flush for request-scoped collectors
+    ...config,
+  });
 }

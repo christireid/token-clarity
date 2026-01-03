@@ -270,6 +270,8 @@ export {
   createTelemetryCollector,
   getTelemetryCollector,
   setGlobalTelemetryCollector,
+  resetGlobalTelemetryCollector,
+  createRequestScopedCollector,
   ConsoleExporter,
   MemoryExporter,
   JSONLinesExporter,
@@ -281,3 +283,17 @@ export {
   createHTTPExporter,
   createOTLPExporter,
 } from './telemetry/index.js';
+
+// Remote Pricing
+export type {
+  PricingSource,
+  RemotePricingOptions,
+  PricingStorage,
+} from './cost/index.js';
+
+export {
+  RemotePricingFetcher,
+  getRemotePricingFetcher,
+  initializeRemotePricing,
+  refreshPricing,
+} from './cost/index.js';

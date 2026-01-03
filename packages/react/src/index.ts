@@ -79,6 +79,35 @@ export {
   type UseDevtoolsReturn,
 } from './hooks/useDevtools.js';
 
+export {
+  useCostPreview,
+  type UseCostPreviewOptions,
+  type UseCostPreviewReturn,
+  type ModelComparison,
+} from './hooks/useCostPreview.js';
+
+export {
+  useModelRouter,
+  defaultModelTiers,
+  type UseModelRouterOptions,
+  type UseModelRouterReturn,
+  type TaskComplexity,
+  type ModelTier,
+  type RoutingStrategy,
+  type ComplexityHints,
+  type RoutingResult,
+} from './hooks/useModelRouter.js';
+
+export {
+  useBudgetGuardrails,
+  type UseBudgetGuardrailsOptions,
+  type UseBudgetGuardrailsReturn,
+  type BudgetPeriod,
+  type BudgetLimit,
+  type BudgetPeriodStatus,
+  type BudgetAlert,
+} from './hooks/useBudgetGuardrails.js';
+
 // Context
 export {
   TokenOptimizerContext,
@@ -98,3 +127,34 @@ export {
   type DevtoolsPanelPosition,
   type DevtoolsTab,
 } from './components/TokenDevtoolsPanel.js';
+
+// New composable devtools
+export {
+  DevtoolsPanel,
+  type DevtoolsPanelProps,
+  DevtoolsProvider,
+  useDevtoolsContext,
+  useOptionalDevtoolsContext,
+  type DevtoolsProviderProps,
+  type DevtoolsContextValue,
+  type DevtoolsBudgetStatus,
+  type BudgetPeriodStatus as DevtoolsBudgetPeriodStatus,
+  darkTheme,
+  lightTheme,
+  mergeTheme,
+  getTheme,
+  baseStyles,
+  icons,
+  type DevtoolsTheme,
+  type DevtoolsThemeColors,
+  formatCurrency,
+  formatCompact,
+  formatDuration,
+  formatPercent,
+  formatRelativeTime,
+  OverviewTab,
+  RequestsTab,
+  BreakdownTab,
+  CacheTab,
+  CompareTab,
+} from './components/devtools/index.js';
