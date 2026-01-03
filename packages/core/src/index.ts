@@ -243,3 +243,41 @@ export {
   calculateUtilization,
   TokenPolicy,
 } from './policy/index.js';
+
+// Telemetry
+export type {
+  TelemetryEventType,
+  TelemetryEvent,
+  TokenInfo as TelemetryTokenInfo,
+  CostInfo as TelemetryCostInfo,
+  RequestEvent,
+  CacheEvent,
+  BudgetEvent as TelemetryBudgetEvent,
+  OptimizationEvent,
+  TokenCountEvent,
+  AnyTelemetryEvent,
+  TelemetryHandler,
+  TelemetrySubscriber,
+  AggregatedMetrics,
+  Span,
+  TelemetryConfig,
+  SpanContext,
+  TelemetryExporter,
+} from './telemetry/index.js';
+
+export {
+  TelemetryCollector,
+  createTelemetryCollector,
+  getTelemetryCollector,
+  setGlobalTelemetryCollector,
+  ConsoleExporter,
+  MemoryExporter,
+  JSONLinesExporter,
+  CallbackExporter,
+  HTTPExporter,
+  OTLPExporter,
+  createConsoleExporter,
+  createMemoryExporter,
+  createHTTPExporter,
+  createOTLPExporter,
+} from './telemetry/index.js';
