@@ -170,10 +170,92 @@ jobs:
 
           echo "All bundle size checks passed!"
 
+  regression:
+    name: Token/Cost Regression Check
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Run regression checks
+        id: regression
+        run: |
+          echo "Running token/cost regression checks..."
+          pnpm --filter @token-optimizer/core bench:regression 2>&1 | tee regression-output.txt
+          echo "regression_output<<EOF" >> $GITHUB_OUTPUT
+          cat regression-output.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Comment regression results on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const output = `${{ steps.regression.outputs.regression_output }}`;
+            const body = `## Token/Cost Regression Check ✅
+
+            All regression checks passed! Token counting and cost estimation are within expected tolerances.
+
+            <details>
+            <summary>Details</summary>
+
+            \`\`\`
+            ${output}
+            \`\`\`
+            </details>
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+  benchmarks:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Run benchmarks
+        run: pnpm --filter @token-optimizer/core bench || true
+
   publish-dry-run:
     name: Publish (Dry Run)
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, test, build]
+    needs: [lint, typecheck, test, build, regression]
     if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v4

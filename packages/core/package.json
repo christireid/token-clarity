@@ -78,7 +78,9 @@
     "build": "tsup",
     "clean": "rimraf dist",
     "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "bench": "vitest bench --run",
+    "bench:regression": "tsx benchmarks/regression-check.ts"
   },
   "dependencies": {},
   "devDependencies": {
