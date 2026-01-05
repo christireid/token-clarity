@@ -1,6 +1,25 @@
 /**
  * @module components/TokenDevtoolsPanel
  * Developer tools panel for monitoring token usage, costs, and optimizations
+ *
+ * @deprecated This component is deprecated. Use `DevtoolsPanel` from
+ * `@token-optimizer/react/components` instead, which provides a composable
+ * architecture with better customization options.
+ *
+ * Migration guide:
+ * ```tsx
+ * // Before (deprecated)
+ * import { TokenDevtoolsPanel } from '@token-optimizer/react';
+ *
+ * // After (recommended)
+ * import { DevtoolsProvider, DevtoolsPanel } from '@token-optimizer/react';
+ *
+ * <DevtoolsProvider>
+ *   <DevtoolsPanel />
+ * </DevtoolsProvider>
+ * ```
+ *
+ * This component will be removed in v1.0.0.
  */
 
 import {
@@ -12,6 +31,14 @@ import {
   type CSSProperties,
 } from 'react';
 import type { SessionStats } from '@token-optimizer/core';
+import {
+  formatCurrency,
+  formatCompact,
+  formatDuration,
+  formatPercent,
+  formatRelativeTime,
+  getPositionStyles,
+} from './devtools/utils.js';
 
 /**
  * Request entry for the history log
@@ -310,70 +337,7 @@ const themes = {
   },
 };
 
-/**
- * Format a number as currency
- */
-function formatCurrency(value: number): string {
-  return value < 0.01
-    ? `$${value.toFixed(4)}`
-    : `$${value.toFixed(2)}`;
-}
-
-/**
- * Format a number with compact notation
- */
-function formatCompact(value: number): string {
-  if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
-  if (value >= 1000) return `${(value / 1000).toFixed(1)}K`;
-  return value.toFixed(0);
-}
-
-/**
- * Format duration in ms
- */
-function formatDuration(ms: number): string {
-  if (ms >= 1000) return `${(ms / 1000).toFixed(1)}s`;
-  return `${ms.toFixed(0)}ms`;
-}
-
-/**
- * Format percentage
- */
-function formatPercent(value: number): string {
-  return `${(value * 100).toFixed(1)}%`;
-}
-
-/**
- * Format relative time
- */
-function formatRelativeTime(timestamp: number): string {
-  const seconds = Math.floor((Date.now() - timestamp) / 1000);
-  if (seconds < 60) return `${seconds}s ago`;
-  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-  return new Date(timestamp).toLocaleDateString();
-}
-
-/**
- * Get position styles based on position prop
- */
-function getPositionStyles(position: DevtoolsPanelPosition): CSSProperties {
-  const margin = '16px';
-  switch (position) {
-    case 'bottom-right':
-      return { bottom: margin, right: margin };
-    case 'bottom-left':
-      return { bottom: margin, left: margin };
-    case 'top-right':
-      return { top: margin, right: margin };
-    case 'top-left':
-      return { top: margin, left: margin };
-    case 'center':
-      return { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' };
-    default:
-      return { bottom: margin, right: margin };
-  }
-}
+// Formatting functions imported from './devtools/utils.js' above
 
 /**
  * Icon components using unicode/emoji
@@ -398,11 +362,15 @@ const icons = {
  * TokenDevtoolsPanel - A comprehensive developer tools panel for monitoring
  * token usage, costs, cache performance, and request history.
  *
+ * @deprecated Use `DevtoolsPanel` from `@token-optimizer/react/components` instead.
+ * This component will be removed in v1.0.0. See the module-level JSDoc for migration guide.
+ *
  * @param props - Panel configuration props
  * @returns React component
  *
  * @example
  * ```tsx
+ * // DEPRECATED - use DevtoolsProvider + DevtoolsPanel instead
  * import { TokenDevtoolsPanel } from '@token-optimizer/react';
  *
  * function App() {

@@ -154,3 +154,53 @@ export interface StorageAdapter {
   setItem(key: string, value: string): void | Promise<void>;
   removeItem(key: string): void | Promise<void>;
 }
+
+/**
+ * Unified model pricing information in USD.
+ * This is the canonical source for model pricing across the library.
+ */
+export interface ModelPricing {
+  /** Price per 1,000 input tokens */
+  inputPer1k: number;
+  /** Price per 1,000 output tokens */
+  outputPer1k: number;
+  /** Discounted price for cached input tokens (if supported) */
+  cachedInputPer1k?: number;
+  /** Context window size in tokens */
+  contextWindow?: number;
+  /** Maximum output tokens */
+  maxOutputTokens?: number;
+  /** Model identifier */
+  model?: string;
+  /** Provider name */
+  provider?: string;
+}
+
+/**
+ * Unified cost estimate for a request.
+ * This is the canonical source for cost estimates across the library.
+ */
+export interface CostEstimate {
+  /** Cost of input tokens in USD */
+  inputCost: number;
+  /** Cost of output tokens in USD */
+  outputCost: number;
+  /** Total cost in USD */
+  totalCost: number;
+  /** Savings from cache (structured format) */
+  savings?: {
+    /** Amount saved from cache in USD */
+    fromCache: number;
+    /** Savings as a percentage */
+    percentage: number;
+  };
+  /**
+   * Savings from cached tokens in USD (flat format).
+   * @deprecated Use `savings.fromCache` instead
+   */
+  cacheSavings?: number;
+  /** Model used for estimation */
+  model?: string;
+  /** Provider */
+  provider?: string;
+}

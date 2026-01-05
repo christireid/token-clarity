@@ -1,14 +1,27 @@
 /**
  * @module adapters/types
  * Type definitions for provider adapters
+ *
+ * Note: For unified types compatible with the public API, import
+ * `CostEstimate` and `ModelPricing` from `@token-optimizer/core`.
+ * The adapter-specific types below have different property names
+ * to match provider API responses more closely.
  */
 
 import type { ChatMessage, Provider } from '../types/index.js';
 
+// Re-export unified types for consumers who want them
+export type {
+  CostEstimate as UnifiedCostEstimate,
+  ModelPricing as UnifiedModelPricing,
+} from '../types/index.js';
+
 /**
- * Token usage breakdown
+ * Adapter-specific token usage breakdown.
+ * Uses short property names (input, output) to match provider APIs.
+ * For the public API type, use `TokenUsage` from `@token-optimizer/core`.
  */
-export interface TokenUsage {
+export interface AdapterTokenUsage {
   /** Input/prompt tokens */
   input: number;
   /** Output/completion tokens */
@@ -20,9 +33,16 @@ export interface TokenUsage {
 }
 
 /**
- * Cost estimate with breakdown
+ * @deprecated Use `AdapterTokenUsage` instead.
+ * Kept for backwards compatibility.
  */
-export interface CostEstimate {
+export type TokenUsage = AdapterTokenUsage;
+
+/**
+ * Adapter-specific cost estimate with required model/provider fields.
+ * For the public API type, use `CostEstimate` from `@token-optimizer/core`.
+ */
+export interface AdapterCostEstimate {
   /** Cost for input tokens (USD) */
   inputCost: number;
   /** Cost for output tokens (USD) */
@@ -38,9 +58,16 @@ export interface CostEstimate {
 }
 
 /**
- * Model pricing information
+ * @deprecated Use `AdapterCostEstimate` for adapter-specific code,
+ * or `CostEstimate` from `@token-optimizer/core` for the public API.
  */
-export interface ModelPricing {
+export type CostEstimate = AdapterCostEstimate;
+
+/**
+ * Adapter-specific model pricing with required context window.
+ * For the public API type, use `ModelPricing` from `@token-optimizer/core`.
+ */
+export interface AdapterModelPricing {
   /** Model identifier */
   model: string;
   /** Provider name */
@@ -56,6 +83,12 @@ export interface ModelPricing {
   /** Maximum output tokens */
   maxOutputTokens?: number;
 }
+
+/**
+ * @deprecated Use `AdapterModelPricing` for adapter-specific code,
+ * or `ModelPricing` from `@token-optimizer/core` for the public API.
+ */
+export type ModelPricing = AdapterModelPricing;
 
 /**
  * Provider capabilities

@@ -1,40 +1,18 @@
 /**
  * @module cost/types
  * Type definitions for cost estimation and tracking
+ *
+ * Note: `ModelPricing` and `CostEstimate` are re-exported from `../types/index.js`
+ * for backwards compatibility. For new code, import directly from `@token-optimizer/core`.
  */
 
 import type { RequestUsage, SessionStats, UsageData, StorageAdapter } from '../types/index.js';
 
-/**
- * Model pricing information in USD
- */
-export interface ModelPricing {
-  /** Price per 1,000 input tokens */
-  inputPer1k: number;
-  /** Price per 1,000 output tokens */
-  outputPer1k: number;
-  /** Discounted price for cached input tokens */
-  cachedInputPer1k?: number;
-}
-
-/**
- * Cost estimate for a request
- */
-export interface CostEstimate {
-  /** Cost of input tokens in USD */
-  inputCost: number;
-  /** Cost of output tokens in USD */
-  outputCost: number;
-  /** Total cost in USD */
-  totalCost: number;
-  /** Savings from cache (if applicable) */
-  savings?: {
-    /** Amount saved from cache in USD */
-    fromCache: number;
-    /** Savings as a percentage */
-    percentage: number;
-  };
-}
+// Re-export unified types from canonical location
+export type {
+  ModelPricing,
+  CostEstimate,
+} from '../types/index.js';
 
 /**
  * Options for usage tracker
