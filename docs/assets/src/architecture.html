@@ -1,0 +1,102 @@
+<meta charset="utf-8">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1280px;height:470px;overflow:hidden}
+  body{background:linear-gradient(165deg,#14141f 0%,#0d0d14 100%);
+    font-family:Inter,system-ui,sans-serif;color:#e9ebf3;padding:26px 30px;-webkit-font-smoothing:antialiased}
+  .row{display:flex;gap:14px;align-items:stretch}
+  .lane{font:600 9.5px Inter;letter-spacing:1.3px;text-transform:uppercase;color:#5d637a;
+    writing-mode:vertical-rl;transform:rotate(180deg);text-align:center;padding:4px 0;
+    border-right:1px solid #26263a;margin-right:4px;width:26px;flex:0 0 26px}
+  .box{flex:1;border-radius:12px;border:1px solid #292939;background:#181822;padding:14px 16px}
+  .box .t{display:flex;align-items:center;gap:9px;margin-bottom:4px}
+  .box .t b{font:700 13.5px Inter;letter-spacing:-.2px}
+  .box .t code{font:500 11px 'JetBrains Mono';color:#7c8299}
+  .box .t .sz{margin-left:auto;font:600 10px 'JetBrains Mono';color:#6f7690;
+    background:#20202e;border:1px solid #2c2c3e;padding:3px 8px;border-radius:6px}
+  .box p{font:400 11.5px/1.6 Inter;color:#868ca3;margin-bottom:10px}
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font:500 10.5px 'JetBrains Mono';padding:4px 8px;border-radius:6px;
+    background:#20202e;border:1px solid #2b2b3d;color:#9aa1ba}
+  .dot{width:9px;height:9px;border-radius:3px;display:block}
+  .flow{display:flex;align-items:center;justify-content:center;gap:9px;color:#3f4459;
+    font:600 9.5px Inter;letter-spacing:1.2px;text-transform:uppercase;margin:11px 0}
+  .flow s{flex:1;height:1px;background:linear-gradient(90deg,transparent,#2e2e42,transparent);display:block}
+  .prov{display:grid;grid-template-columns:repeat(8,1fr);gap:8px}
+  .p{background:#181822;border:1px solid #292939;border-radius:9px;padding:10px 6px;text-align:center}
+  .p b{display:block;font:600 11px Inter;color:#c3c9dd}
+  .p span{display:block;font:500 9px 'JetBrains Mono';color:#5f6579;margin-top:2px}
+  .note{margin-top:14px;text-align:center;font:400 11px Inter;color:#5d637a}
+  .note code{font-family:'JetBrains Mono';color:#7f86a0}
+</style>
+<body>
+
+<div class="row">
+  <div class="lane">Your app</div>
+  <div class="box" style="border-color:#2f3a52">
+    <div class="t"><span class="dot" style="background:#38bdf8"></span><b>React surface</b>
+      <code>@token-optimizer/react</code><span class="sz">18.3 kB gz</span></div>
+    <p>Hooks and components that wire optimization into an existing chat UI without changing your transport.</p>
+    <div class="tags">
+      <span class="tag" style="color:#7dd3fc">useOptimizedChat</span>
+      <span class="tag">useTokenBudget</span>
+      <span class="tag">useCostTracker</span>
+      <span class="tag">usePromptOptimizer</span>
+      <span class="tag">useModelRouter</span>
+      <span class="tag">useBudgetGuardrails</span>
+      <span class="tag">useCostPreview</span>
+      <span class="tag" style="color:#7dd3fc">&lt;TokenDevtoolsPanel /&gt;</span>
+    </div>
+  </div>
+</div>
+
+<div class="flow"><s></s><span>builds on</span><s></s></div>
+
+<div class="row">
+  <div class="lane">Engine</div>
+  <div class="box" style="border-color:#33405c">
+    <div class="t"><span class="dot" style="background:#3b82f6"></span><b>Core primitives</b>
+      <code>@token-optimizer/core</code><span class="sz">28.5 kB gz</span></div>
+    <p>Framework-free, zero-dependency building blocks. Import one and the rest tree-shakes away.</p>
+    <div class="tags">
+      <span class="tag" style="color:#93c5fd">tokenizers</span>
+      <span class="tag" style="color:#93c5fd">cache alignment</span>
+      <span class="tag" style="color:#93c5fd">budget</span>
+      <span class="tag" style="color:#93c5fd">cost + pricing</span>
+      <span class="tag" style="color:#93c5fd">compression</span>
+      <span class="tag" style="color:#93c5fd">policy</span>
+      <span class="tag" style="color:#93c5fd">telemetry</span>
+      <span class="tag" style="color:#93c5fd">adapters</span>
+    </div>
+  </div>
+  <div class="box" style="border-color:#25493a;flex:0 0 380px">
+    <div class="t"><span class="dot" style="background:#22c55e"></span><b>Semantic cache</b>
+      <span class="sz">4.3 kB gz</span></div>
+    <p><code style="font-family:'JetBrains Mono';font-size:10.5px">@token-optimizer/semantic-cache</code> — optional,
+       answers near-duplicate questions without an API call.</p>
+    <div class="tags">
+      <span class="tag" style="color:#86efac">TF-IDF</span>
+      <span class="tag" style="color:#86efac">transformers.js</span>
+      <span class="tag">IndexedDB</span>
+      <span class="tag">memory</span>
+      <span class="tag">cosine</span>
+    </div>
+  </div>
+</div>
+
+<div class="flow"><s></s><span>provider adapters for</span><s></s></div>
+
+<div class="prov">
+  <div class="p"><b>OpenAI</b><span>gpt-4o · o1</span></div>
+  <div class="p"><b>Anthropic</b><span>claude 3.x</span></div>
+  <div class="p"><b>Google</b><span>gemini 1.5</span></div>
+  <div class="p"><b>Azure</b><span>openai</span></div>
+  <div class="p"><b>Bedrock</b><span>aws</span></div>
+  <div class="p"><b>Groq</b><span>llama · mixtral</span></div>
+  <div class="p"><b>Mistral</b><span>mistral · mixtral</span></div>
+  <div class="p"><b>Cohere</b><span>command</span></div>
+</div>
+
+<div class="note">Every layer ships ESM + CJS with full type declarations · sizes are gzipped with <i>every</i> export imported · one symbol tree-shakes to <code>~0.8 kB</code></div>
+
+<script>window.TOTAL_FRAMES=1;window.setFrame=()=>{};</script>
