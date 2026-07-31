@@ -1,0 +1,79 @@
+<meta charset="utf-8">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1280px;height:530px;overflow:hidden}
+  body{background:linear-gradient(165deg,#14141f 0%,#0d0d14 100%);
+    font-family:Inter,system-ui,sans-serif;color:#e9ebf3;padding:30px 32px;-webkit-font-smoothing:antialiased}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .c{background:linear-gradient(160deg,#1b1b28 0%,#16161f 100%);
+     border:1px solid #292939;border-radius:14px;padding:19px 20px;position:relative;overflow:hidden}
+  .c::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--k)}
+  .ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+      margin-bottom:14px;background:color-mix(in srgb, var(--k) 16%, transparent);
+      border:1px solid color-mix(in srgb, var(--k) 32%, transparent)}
+  h3{font:700 15px Inter;letter-spacing:-.3px;margin-bottom:7px;color:#f3f4fa}
+  p{font:400 12.5px/1.65 Inter;color:#8d92a8}
+  p b{color:#b9bfd3;font-weight:600}
+  .m{margin-top:13px;display:inline-flex;align-items:center;gap:7px;font:600 11px 'JetBrains Mono';
+     padding:5px 10px;border-radius:7px;background:color-mix(in srgb, var(--k) 13%, transparent);color:var(--k)}
+  .api{font:500 10.5px 'JetBrains Mono';color:#616a85;margin-top:10px;display:block}
+</style>
+<body>
+<div class="grid">
+
+  <div class="c" style="--k:#3b82f6">
+    <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h11M4 18h6"/></svg></div>
+    <h3>Provider cache alignment</h3>
+    <p>Reorders prompts so the <b>stable prefix stays byte-identical</b> across turns, then emits native
+       <b>cache_control</b> breakpoints per provider.</p>
+    <span class="m">49.2% cheaper · measured</span>
+    <code class="api">buildCacheAlignedPrompt()</code>
+  </div>
+
+  <div class="c" style="--k:#22c55e">
+    <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+    <h3>Semantic cache</h3>
+    <p>Embedding similarity match on the way in — a near-duplicate question skips the API call entirely.
+       <b>TF-IDF built in</b>, transformers.js optional.</p>
+    <span class="m">100% saved on a hit</span>
+    <code class="api">createSemanticCache()</code>
+  </div>
+
+  <div class="c" style="--k:#f59e0b">
+    <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+    <h3>Budget guardrails</h3>
+    <p>Real token counting with per-session, <b>daily and monthly ceilings</b>. Warns, then trims
+       messages to fit before you overspend.</p>
+    <span class="m">ok · warning · exceeded</span>
+    <code class="api">createBudgetManager()</code>
+  </div>
+
+  <div class="c" style="--k:#a78bfa">
+    <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3M3 16v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3M8 12h8"/></svg></div>
+    <h3>Context compression</h3>
+    <p>Extractive summarisation and sliding-window history management keep long threads inside the
+       window <b>without dropping the plot</b>.</p>
+    <span class="m">6 msgs → 1 summary</span>
+    <code class="api">summarizeHistory()</code>
+  </div>
+
+  <div class="c" style="--k:#38bdf8">
+    <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></div>
+    <h3>Cost analytics &amp; devtools</h3>
+    <p>A drop-in <b>&lt;TokenDevtoolsPanel /&gt;</b> with live spend, request history, per-model breakdown
+       and side-by-side provider comparison.</p>
+    <span class="m">5 tabs · light + dark</span>
+    <code class="api">&lt;TokenDevtoolsPanel /&gt;</code>
+  </div>
+
+  <div class="c" style="--k:#f472b6">
+    <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/></svg></div>
+    <h3>One API, eight providers</h3>
+    <p>OpenAI, Anthropic, Google, Azure, Bedrock, Groq, Mistral and Cohere behind a
+       <b>single adapter interface</b> — swap models without rewriting call sites.</p>
+    <span class="m">+ OpenTelemetry export</span>
+    <code class="api">createExtendedAdapter('bedrock')</code>
+  </div>
+
+</div>
+<script>window.TOTAL_FRAMES=1;window.setFrame=()=>{};</script>

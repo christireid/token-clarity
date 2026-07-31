@@ -1,0 +1,472 @@
+<meta charset="utf-8">
+<style>
+  :root{
+    --bg:#1e1e2e; --bg2:#2a2a3e; --bg3:#3a3a4e;
+    --text:#e0e0e0; --text2:#a0a0b0; --border:#3a3a4e;
+    --accent:#3b82f6; --success:#22c55e; --warning:#f59e0b; --error:#ef4444;
+    --app:#15151f; --app2:#1a1a26;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1160px;height:748px;overflow:hidden}
+  body{
+    background:radial-gradient(1200px 700px at 20% -10%, #2b2350 0%, #14141d 55%, #0e0e15 100%);
+    font-family:Inter,system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  .chrome{
+    width:1120px;height:708px;border-radius:12px;overflow:hidden;
+    background:var(--app);border:1px solid #2c2c3c;
+    box-shadow:0 30px 70px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.03) inset;
+    display:flex;flex-direction:column;
+  }
+  .titlebar{
+    height:36px;flex:0 0 36px;background:#20202c;border-bottom:1px solid #2c2c3c;
+    display:flex;align-items:center;gap:8px;padding:0 12px;
+  }
+  .dot{width:11px;height:11px;border-radius:50%}
+  .url{
+    margin-left:10px;flex:1;height:22px;border-radius:6px;background:#15151f;
+    border:1px solid #2c2c3c;display:flex;align-items:center;padding:0 10px;
+    font:400 11px/1 'JetBrains Mono',monospace;color:#7c7c90;
+  }
+  .url b{color:#b6b6c8;font-weight:500}
+  .body{flex:1;display:flex;min-height:0}
+
+  /* ---------- sidebar ---------- */
+  .side{
+    width:196px;flex:0 0 196px;background:var(--app2);border-right:1px solid #262634;
+    padding:14px 10px;display:flex;flex-direction:column;gap:3px;
+  }
+  .brand{display:flex;align-items:center;gap:9px;padding:2px 6px 14px}
+  .mark{
+    width:26px;height:26px;border-radius:8px;flex:0 0 26px;
+    background:linear-gradient(135deg,#60a5fa,#3b82f6 45%,#22c55e);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 3px 10px rgba(59,130,246,.4);
+  }
+  .mark i{width:9px;height:9px;border-radius:50%;background:#0e0e15;display:block}
+  .brand b{font:700 14px Inter;color:#f2f2f7;letter-spacing:-.2px}
+  .navlab{font:600 9px Inter;letter-spacing:1.1px;color:#5b5b70;padding:12px 8px 5px;text-transform:uppercase}
+  .nav{
+    display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:7px;
+    font:500 12px Inter;color:#9494ab;
+  }
+  .nav.on{background:#26263a;color:#eaeaf5}
+  .nav .ic{width:14px;height:14px;border-radius:4px;background:#3a3a52;flex:0 0 14px}
+  .nav.on .ic{background:var(--accent)}
+  .nav .tag{margin-left:auto;font:600 9px 'JetBrains Mono';color:var(--success);
+    background:rgba(34,197,94,.14);padding:2px 5px;border-radius:4px}
+  .side .foot{margin-top:auto;padding:9px;border-radius:8px;background:#20202e;border:1px solid #2c2c3e}
+  .side .foot .k{font:600 9px Inter;letter-spacing:.8px;color:#6b6b82;text-transform:uppercase}
+  .side .foot .v{font:700 15px 'JetBrains Mono';color:var(--success);margin-top:3px}
+  .side .foot .s{font:400 9px Inter;color:#6b6b82;margin-top:1px}
+
+  /* ---------- chat ---------- */
+  .chat{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--app)}
+  .chead{
+    height:46px;flex:0 0 46px;border-bottom:1px solid #262634;display:flex;align-items:center;
+    gap:8px;padding:0 16px;
+  }
+  .chead h1{font:600 13px Inter;color:#e8e8f2}
+  .pill{
+    font:500 10px 'JetBrains Mono';color:#9a9ab0;background:#22222f;border:1px solid #2e2e40;
+    padding:3px 8px;border-radius:20px;
+  }
+  .pill.live{color:var(--success);border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.1);
+    display:flex;align-items:center;gap:5px}
+  .pill.live s{width:5px;height:5px;border-radius:50%;background:var(--success);display:block}
+  .thread{flex:1;overflow:hidden;padding:16px 16px 6px;display:flex;flex-direction:column;gap:14px;justify-content:flex-end}
+  .msg{display:flex;gap:10px;max-width:100%}
+  .av{width:24px;height:24px;border-radius:7px;flex:0 0 24px;font:700 10px Inter;
+    display:flex;align-items:center;justify-content:center;color:#0e0e15}
+  .av.u{background:linear-gradient(135deg,#a78bfa,#7c5cf5);color:#fff}
+  .av.a{background:linear-gradient(135deg,#60a5fa,#22c55e)}
+  .bub{font:400 12.5px/1.62 Inter;color:#cfcfdd;padding-top:3px}
+  .bub .who{font:600 11px Inter;color:#8b8ba3;display:block;margin-bottom:3px}
+  .bub code{font:500 11.5px 'JetBrains Mono';background:#242432;padding:1px 5px;border-radius:4px;color:#93c5fd}
+  .cur{display:inline-block;width:7px;height:14px;background:var(--accent);vertical-align:-2px;margin-left:2px}
+
+  /* prompt segments strip */
+  .segs{margin:0 16px 10px;background:#1a1a26;border:1px solid #26263a;border-radius:9px;padding:10px 11px}
+  .segs .t{display:flex;align-items:center;gap:7px;font:600 9px Inter;letter-spacing:.9px;
+    color:#6b6b82;text-transform:uppercase;margin-bottom:8px}
+  .segs .t em{margin-left:auto;font:600 9px 'JetBrains Mono';font-style:normal;color:var(--success)}
+  .bar{height:10px;border-radius:5px;overflow:hidden;display:flex;background:#242432}
+  .bar span{display:block;height:100%}
+  .legend{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+  .legend div{display:flex;align-items:center;gap:5px;font:500 9.5px 'JetBrains Mono';color:#8a8aa2}
+  .legend i{width:7px;height:7px;border-radius:2px;display:block}
+  .legend b{color:#c8c8da;font-weight:600}
+
+  .composer{margin:0 16px 14px;border:1px solid #2e2e40;background:#1c1c28;border-radius:10px;
+    padding:10px 12px;display:flex;align-items:center;gap:10px}
+  .composer .txt{flex:1;font:400 12.5px Inter;color:#d5d5e3;white-space:nowrap;overflow:hidden}
+  .composer .txt.ph{color:#5f5f76}
+  .composer .cnt{font:500 10px 'JetBrains Mono';color:#6f6f88}
+  .composer .btn{width:28px;height:28px;border-radius:7px;background:var(--accent);
+    display:flex;align-items:center;justify-content:center;color:#fff;font:700 12px Inter}
+
+  /* ---------- devtools panel ---------- */
+  .dt{
+    width:452px;flex:0 0 452px;border-left:1px solid #2c2c3c;background:var(--bg);
+    display:flex;flex-direction:column;font-family:'JetBrains Mono',ui-monospace,monospace;
+    color:var(--text);font-size:12px;line-height:1.4;
+  }
+  .dthead{background:var(--bg2);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;padding:9px 12px}
+  .dthead .ti{display:flex;align-items:center;gap:8px;font:600 13px Inter;color:#eaeaf2}
+  .dthead .st{display:flex;gap:12px;font-size:11px;color:#c2c2d2;align-items:center}
+  .dthead .st b{font-weight:600;color:#fff}
+  .dttabs{display:flex;border-bottom:1px solid var(--border);padding:0 8px;background:var(--bg)}
+  .dttabs div{padding:9px 11px;font:500 10.5px Inter;letter-spacing:.6px;text-transform:uppercase;
+    color:var(--text2);border-bottom:2px solid transparent}
+  .dttabs div.on{color:var(--accent);border-bottom-color:var(--accent)}
+  .dtc{padding:12px;flex:1;overflow:hidden}
+  .sect{margin-bottom:15px}
+  .sect>.h{font:600 10.5px Inter;letter-spacing:.6px;text-transform:uppercase;color:var(--text2);
+    opacity:.75;margin-bottom:8px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .stat{background:var(--bg2);border-radius:5px;padding:9px 10px;display:flex;flex-direction:column;gap:2px}
+  .stat .l{font:500 9.5px Inter;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);opacity:.8}
+  .stat .v{font:700 17px 'JetBrains Mono';color:var(--text);letter-spacing:-.5px}
+  .stat .s{font:400 9.5px 'JetBrains Mono';color:var(--text2);opacity:.7}
+  .prog{height:5px;border-radius:3px;background:var(--bg3);overflow:hidden;margin-top:5px}
+  .prog i{display:block;height:100%;border-radius:3px}
+  .brow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:11px}
+  table{width:100%;border-collapse:collapse;font-size:11px}
+  th{text-align:left;padding:7px 9px;font:600 9.5px Inter;letter-spacing:.6px;text-transform:uppercase;
+    color:var(--text2);border-bottom:1px solid var(--border);background:var(--bg2)}
+  td{padding:7px 9px;border-bottom:1px solid var(--border);color:var(--text);font-family:'JetBrains Mono'}
+  .badge{display:inline-block;padding:1px 5px;border-radius:4px;font:600 9px Inter;margin-left:4px}
+  .bkrow{background:var(--bg2);border-radius:5px;padding:9px 10px;display:flex;
+    justify-content:space-between;align-items:center;margin-bottom:8px}
+  .bkrow .n{font:500 12px 'JetBrains Mono';color:var(--text)}
+  .bkrow .m{font:400 9.5px Inter;color:var(--text2);margin-top:2px}
+  .bkrow .c{font:700 13px 'JetBrains Mono';color:var(--accent)}
+  .tips{background:var(--bg2);border-radius:5px;padding:11px;font:400 10.5px/1.65 Inter;color:var(--text2)}
+  .tips b{color:var(--text)}
+  .tips ul{margin:6px 0 0 14px}
+  .cmp{background:var(--bg2);border-radius:5px;padding:9px 10px;margin-bottom:6px;
+    display:flex;align-items:center;gap:9px}
+  .cmp .nm{font:500 11.5px 'JetBrains Mono';color:var(--text);width:118px;flex:0 0 118px}
+  .cmp .tr{flex:1;height:7px;border-radius:4px;background:var(--bg3);overflow:hidden}
+  .cmp .tr i{display:block;height:100%;border-radius:4px}
+  .cmp .pc{font:700 11px 'JetBrains Mono';width:62px;text-align:right;flex:0 0 62px}
+  .best{font:600 9px Inter;background:rgba(34,197,94,.16);color:var(--success);padding:2px 5px;border-radius:4px}
+</style>
+
+<div class="chrome">
+  <div class="titlebar">
+    <span class="dot" style="background:#ff5f57"></span>
+    <span class="dot" style="background:#febc2e"></span>
+    <span class="dot" style="background:#28c840"></span>
+    <div class="url">🔒&nbsp;&nbsp;localhost:3000/<b>playground</b></div>
+  </div>
+  <div class="body">
+    <!-- sidebar -->
+    <div class="side">
+      <div class="brand"><div class="mark"><i></i></div><b>Token&nbsp;Clarity</b></div>
+      <div class="navlab">Workspace</div>
+      <div class="nav on"><span class="ic"></span>Playground</div>
+      <div class="nav"><span class="ic"></span>Requests<span class="tag" id="nvreq">128</span></div>
+      <div class="nav"><span class="ic"></span>Budgets</div>
+      <div class="nav"><span class="ic"></span>Semantic Cache</div>
+      <div class="navlab">Analysis</div>
+      <div class="nav"><span class="ic"></span>Compare Models</div>
+      <div class="nav"><span class="ic"></span>Telemetry</div>
+      <div class="foot">
+        <div class="k">Saved today</div>
+        <div class="v" id="sv">$0.00</div>
+        <div class="s" id="svp">0% vs unoptimized</div>
+      </div>
+    </div>
+
+    <!-- chat -->
+    <div class="chat">
+      <div class="chead">
+        <h1>Playground</h1>
+        <span class="pill">gpt-4o</span>
+        <span class="pill live"><s></s>optimizer on</span>
+      </div>
+      <div class="thread" id="thread"></div>
+      <div class="segs">
+        <div class="t">Prompt composition <em id="segsave">cache prefix 21,820 tok</em></div>
+        <div class="bar" id="segbar"></div>
+        <div class="legend">
+          <div><i style="background:#3b82f6"></i>System <b>1,240</b></div>
+          <div><i style="background:#8b5cf6"></i>Tools <b>2,180</b></div>
+          <div><i style="background:#22c55e"></i>Context <b>18,400</b></div>
+          <div><i style="background:#f59e0b"></i>User <b id="lguser">0</b></div>
+        </div>
+      </div>
+      <div class="composer">
+        <div class="txt ph" id="ctxt">Ask anything…</div>
+        <div class="cnt" id="ccnt">0 tok</div>
+        <div class="btn">↑</div>
+      </div>
+    </div>
+
+    <!-- devtools -->
+    <div class="dt">
+      <div class="dthead">
+        <div class="ti"><span>🪙</span><span>Token Devtools</span></div>
+        <div class="st"><b id="hcost">$0.0000</b><span id="htok">0 tok</span><span>↘</span></div>
+      </div>
+      <div class="dttabs" id="tabs">
+        <div data-t="overview" class="on">Overview</div>
+        <div data-t="requests">Requests</div>
+        <div data-t="breakdown">Breakdown</div>
+        <div data-t="cache">Cache</div>
+        <div data-t="compare">Compare</div>
+      </div>
+      <div class="dtc" id="dtc"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const ease=t=>t<0?0:t>1?1:1-Math.pow(1-t,3);
+const money=(n,d=4)=>'$'+n.toFixed(d);
+const compact=n=>n>=1e6?(n/1e6).toFixed(1)+'M':n>=1000?(n/1000).toFixed(1)+'K':String(Math.round(n));
+const comma=n=>Math.round(n).toLocaleString('en-US');
+
+const PROMPT = "Summarize the Q3 architecture RFC and list the open risks.";
+const REPLY  = "The RFC proposes splitting the ingest tier into three stateless workers behind a shared queue. Open risks: (1) replay ordering during failover, (2) schema drift between v2 and v3 events, (3) unbounded retry cost on the embedding path.";
+
+// ---- timeline (12 fps) ----
+const F = {
+  typeStart: 10, typeEnd: 34,      // typewriter prompt
+  send: 36,                        // message sent
+  streamStart: 42, streamEnd: 74,  // assistant streams
+  settle: 84,
+  tabRequests: 92, tabBreakdown: 116, tabCache: 140, tabCompare: 164, end: 190
+};
+
+const SEG = [
+  {c:'#3b82f6', v:1240}, {c:'#8b5cf6', v:2180}, {c:'#22c55e', v:18400}
+];
+
+function tabAt(i){
+  if(i>=F.tabCompare) return 'compare';
+  if(i>=F.tabCache) return 'cache';
+  if(i>=F.tabBreakdown) return 'breakdown';
+  if(i>=F.tabRequests) return 'requests';
+  return 'overview';
+}
+
+// metric ramp: 0 before send, animates through stream, holds after
+function ramp(i){
+  if(i < F.send) return 0;
+  return ease((i - F.send) / (F.streamEnd + 6 - F.send));
+}
+
+const BASE = { req:127, cost:0.8412, inTok:412000, outTok:96400, cached:318000, saved:1.9740 };
+const ADD  = { req:1,   cost:0.0313, inTok:21906, outTok:64,     cached:21820, saved:0.0641 };
+
+function metrics(i){
+  const p = ramp(i);
+  return {
+    req: BASE.req + ADD.req*(p>0.15?1:0),
+    cost: BASE.cost + ADD.cost*p,
+    inTok: BASE.inTok + ADD.inTok*p,
+    outTok: BASE.outTok + ADD.outTok*p,
+    cached: BASE.cached + ADD.cached*p,
+    saved: BASE.saved + ADD.saved*p,
+    hit: 0.712 + 0.031*p,
+    lat: 1180 - 190*p,
+  };
+}
+
+function renderThread(i){
+  const t = $('#thread');
+  let h = '';
+  h += msg('a','TC','<span class="who">Token Clarity</span>Connected to <code>/api/chat</code>. Cache alignment, budget guardrails and semantic cache are active for this session.');
+  if(i >= F.send){
+    h += msg('u','You','<span class="who">You</span>'+PROMPT);
+  }
+  if(i >= F.streamStart){
+    const p = clamp((i - F.streamStart)/(F.streamEnd - F.streamStart),0,1);
+    const n = Math.round(ease(p) * REPLY.length);
+    const cur = p<1 ? '<span class="cur"></span>' : '';
+    h += msg('a','TC','<span class="who">Token Clarity <code>gpt-4o</code></span>'+REPLY.slice(0,n)+cur);
+  }
+  t.innerHTML = h;
+}
+function msg(k,ini,body){
+  return '<div class="msg"><div class="av '+k+'">'+(k==='u'?'Y':'')+
+    (k==='a'?'<span style="font-size:11px">◆</span>':'')+'</div><div class="bub">'+body+'</div></div>';
+}
+
+function renderComposer(i){
+  const el=$('#ctxt'), cnt=$('#ccnt');
+  if(i >= F.send){ el.className='txt ph'; el.textContent='Ask anything…'; cnt.textContent='0 tok'; return; }
+  const p = clamp((i - F.typeStart)/(F.typeEnd - F.typeStart),0,1);
+  const n = Math.round(p*PROMPT.length);
+  if(n===0){ el.className='txt ph'; el.textContent='Ask anything…'; cnt.textContent='0 tok'; }
+  else { el.className='txt'; el.innerHTML = PROMPT.slice(0,n)+'<span class="cur"></span>';
+         cnt.textContent = Math.max(1,Math.round(n/4))+' tok'; }
+}
+
+function renderSegs(i){
+  const p = ramp(i);
+  const userTok = Math.round(12 * (i>=F.send?1:clamp((i-F.typeStart)/(F.typeEnd-F.typeStart),0,1)));
+  const segs = SEG.concat([{c:'#f59e0b', v:Math.max(60, userTok*8)}]);
+  const tot = segs.reduce((a,b)=>a+b.v,0);
+  $('#segbar').innerHTML = segs.map((s,k)=>{
+    const w = s.v/tot*100;
+    const grow = k<3 ? ease(clamp((i-2)/16,0,1)) : 1;
+    return '<span style="width:'+(w*grow).toFixed(2)+'%;background:'+s.c+'"></span>';
+  }).join('');
+  $('#lguser').textContent = comma(Math.max(60, userTok*8));
+  $('#segsave').textContent = 'cache prefix '+comma(21820*ease(clamp((i-2)/16,0,1)))+' tok';
+  $('#segsave').style.color = p>0 ? '#22c55e' : '#6b6b82';
+}
+
+function renderShell(i){
+  const m = metrics(i);
+  $('#hcost').textContent = money(m.cost);
+  $('#htok').textContent  = compact(m.inTok+m.outTok)+' tok';
+  $('#nvreq').textContent = m.req;
+  $('#sv').textContent    = money(m.saved,2);
+  $('#svp').textContent   = Math.round(m.saved/(m.cost+m.saved)*100)+'% vs unoptimized';
+  [...document.querySelectorAll('#tabs div')].forEach(d=>
+    d.classList.toggle('on', d.dataset.t===tabAt(i)));
+}
+
+function pct(x){ return (x*100).toFixed(1)+'%'; }
+
+function tabOverview(i){
+  const m=metrics(i);
+  const dayLimit=10, monLimit=200, day=m.cost+0.61, mon=m.cost+41.2;
+  return `
+  <div class="sect"><div class="h">Session Overview</div><div class="grid">
+    <div class="stat"><span class="l">Requests</span><span class="v">${m.req}</span></div>
+    <div class="stat"><span class="l">Total Cost</span><span class="v" style="color:var(--accent)">${money(m.cost)}</span></div>
+    <div class="stat"><span class="l">Tokens Used</span><span class="v">${compact(m.inTok+m.outTok)}</span>
+      <span class="s">${compact(m.inTok)} in / ${compact(m.outTok)} out</span></div>
+    <div class="stat"><span class="l">Savings</span><span class="v" style="color:var(--success)">${money(m.saved)}</span>
+      <span class="s">${compact(m.cached)} cached</span></div>
+  </div></div>
+  <div class="sect"><div class="h">Performance</div><div class="grid">
+    <div class="stat"><span class="l">Avg Latency</span><span class="v">${Math.round(m.lat)}ms</span></div>
+    <div class="stat"><span class="l">Cache Hit Rate</span><span class="v" style="color:var(--success)">${pct(m.hit)}</span></div>
+  </div></div>
+  <div class="sect"><div class="h">Budget</div>
+    <div class="brow"><span style="color:var(--text2)">Daily</span><span>${money(day,2)} / ${money(dayLimit,2)}</span></div>
+    <div class="prog"><i style="width:${(day/dayLimit*100).toFixed(1)}%;background:var(--accent)"></i></div>
+    <div class="brow" style="margin-top:8px"><span style="color:var(--text2)">Monthly</span>
+      <span style="color:var(--warning)">${money(mon,2)} / ${money(monLimit,2)}</span></div>
+    <div class="prog"><i style="width:${(mon/monLimit*100).toFixed(1)}%;background:var(--warning)"></i></div>
+  </div>
+  <div class="sect"><div class="h">Optimizations Applied</div>
+    ${[['Provider cache alignment','21,820 tok reused'],
+       ['History compression','6 msgs → 1 summary'],
+       ['Semantic cache','2 hits this session'],
+       ['Budget guardrail','trimmed to fit 128K']]
+      .map(([a,b],k)=>`<div class="brow" style="opacity:${ease(clamp((i-F.settle-k*2)/8,0,1))}">
+        <span style="color:var(--success)">✓ <span style="color:var(--text)">${a}</span></span>
+        <span style="color:var(--text2);font-size:10px">${b}</span></div>`).join('')}
+  </div>`;
+}
+
+const ROWS = [
+  ['just now','gpt-4o',true, 21970, 0.0313, 990],
+  ['12s ago','gpt-4o-mini',true, 8420, 0.0021, 410],
+  ['48s ago','claude-3-5-sonnet',true, 30110, 0.0412, 1320],
+  ['1m ago','gpt-4o',false, 4180, 0.0184, 1510],
+  ['2m ago','gemini-1.5-flash',true, 12660, 0.0009, 380],
+  ['3m ago','gpt-4o',true, 19840, 0.0288, 1040],
+  ['4m ago','claude-3-haiku',false, 6120, 0.0016, 460],
+];
+function tabRequests(i){
+  const n = Math.min(ROWS.length, 1+Math.floor((i-F.tabRequests)/2));
+  return `<div style="margin:-12px"><table>
+  <tr><th>Time</th><th>Model</th><th>Tokens</th><th>Cost</th><th>Latency</th></tr>
+  ${ROWS.slice(0,n).map(r=>`<tr>
+    <td style="color:var(--text2)">${r[0]}</td>
+    <td>${r[1]}${r[2]?'<span class="badge" style="background:rgba(34,197,94,.2);color:var(--success)">⚡</span>':''}</td>
+    <td>${compact(r[3])}</td>
+    <td style="color:var(--accent)">${money(r[4])}</td>
+    <td>${r[5]}ms</td></tr>`).join('')}
+  </table></div>`;
+}
+
+function tabBreakdown(i){
+  const p = ease(clamp((i-F.tabBreakdown)/10,0,1));
+  const models=[['gpt-4o',68,392000,0.5124],['claude-3-5-sonnet',31,214000,0.2610],
+                ['gpt-4o-mini',19,64000,0.0412],['gemini-1.5-flash',10,38400,0.0179]];
+  const provs=[['openai',87,456000,0.5536],['anthropic',31,214000,0.2610],['google',10,38400,0.0179]];
+  const row=(l,r,t,c)=>`<div class="bkrow" style="opacity:${p}">
+    <div><div class="n">${l}</div><div class="m">${r} requests • ${compact(t)} tokens</div></div>
+    <div class="c">${money(c)}</div></div>`;
+  return `<div class="sect"><div class="h">By Model</div>${models.map(m=>row(...m)).join('')}</div>
+          <div class="sect"><div class="h">By Provider</div>${provs.map(m=>row(...m)).join('')}</div>`;
+}
+
+function tabCache(i){
+  const m=metrics(i), p=ease(clamp((i-F.tabCache)/12,0,1));
+  const without=m.cost+m.saved;
+  return `
+  <div class="sect"><div class="h">Cache Performance</div><div class="grid">
+    <div class="stat"><span class="l">Hit Rate</span><span class="v" style="color:var(--success)">${pct(m.hit)}</span></div>
+    <div class="stat"><span class="l">Tokens Cached</span><span class="v">${compact(m.cached)}</span></div>
+    <div class="stat"><span class="l">Cost Saved</span><span class="v" style="color:var(--success)">${money(m.saved)}</span></div>
+    <div class="stat"><span class="l">Efficiency</span><span class="v">${pct(m.saved/without)}</span></div>
+  </div></div>
+  <div class="sect"><div class="h">Savings Breakdown</div>
+    <div style="background:var(--bg2);border-radius:5px;padding:11px">
+      <div class="brow"><span style="color:var(--text2)">Without caching</span><span>${money(without)}</span></div>
+      <div class="prog"><i style="width:${(100*p).toFixed(0)}%;background:var(--error)"></i></div>
+      <div class="brow" style="margin-top:7px"><span style="color:var(--text2)">With caching</span>
+        <span style="color:var(--accent)">${money(m.cost)}</span></div>
+      <div class="prog"><i style="width:${(m.cost/without*100*p).toFixed(1)}%;background:var(--success)"></i></div>
+      <div class="brow" style="margin-top:9px;padding-top:9px;border-top:1px solid var(--border)">
+        <span style="font-weight:600">Total Saved</span>
+        <span style="color:var(--success);font-weight:700">${money(m.saved)} (${pct(m.saved/without)})</span></div>
+    </div></div>
+  <div class="sect"><div class="h">Cache Tips</div>
+    <div class="tips">⚡ <b>Improve cache hit rate:</b>
+      <ul><li>Keep system prompts stable and at the start</li>
+      <li>Minimize dynamic content in the prefix</li>
+      <li>Use cache breakpoints strategically</li></ul></div></div>`;
+}
+
+const CMP=[['GPT-4o','openai',0.0075],['GPT-4o Mini','openai',0.00045],
+           ['Claude 3.5 Sonnet','anthropic',0.0105],['Claude 3 Haiku','anthropic',0.000875],
+           ['Gemini 1.5 Pro','google',0.00375],['Gemini 1.5 Flash','google',0.000225]];
+function tabCompare(i){
+  const p=ease(clamp((i-F.tabCompare)/12,0,1));
+  const monthly=CMP.map(c=>[c[0],c[1],c[2]*100*30]);
+  const max=Math.max(...monthly.map(m=>m[2]));
+  const min=Math.min(...monthly.map(m=>m[2]));
+  const col=(v)=>v===min?'var(--success)':v>max*0.5?'var(--error)':'var(--warning)';
+  return `<div class="sect"><div class="h">⚖️ Estimate — 1,000 in / 500 out • 100 req/day</div>
+  ${monthly.sort((a,b)=>a[2]-b[2]).map(m=>`<div class="cmp">
+    <span class="nm">${m[0]}</span>
+    <span class="tr"><i style="width:${(m[2]/max*100*p).toFixed(1)}%;background:${col(m[2])}"></i></span>
+    <span class="pc" style="color:${col(m[2])}">$${m[2].toFixed(2)}</span></div>`).join('')}
+  </div>
+  <div class="sect"><div class="h">Verdict</div>
+    <div style="background:var(--bg2);border-radius:5px;padding:11px">
+      <div class="brow"><span style="color:var(--text2)">Cheapest</span>
+        <span>Gemini 1.5 Flash · $${min.toFixed(2)}/mo <span class="best">BEST</span></span></div>
+      <div class="brow"><span style="color:var(--text2)">Most expensive</span><span style="color:var(--error)">Claude 3.5 Sonnet · $${max.toFixed(2)}/mo</span></div>
+      <div class="brow" style="padding-top:9px;border-top:1px solid var(--border)">
+        <span style="font-weight:600">Potential savings</span>
+        <span style="color:var(--success);font-weight:700">$${((max-min)*p).toFixed(2)}/mo (${((1-min/max)*100*p).toFixed(0)}%)</span></div>
+    </div></div>`;
+}
+
+window.setFrame = function(i){
+  renderShell(i); renderThread(i); renderComposer(i); renderSegs(i);
+  const t=tabAt(i);
+  $('#dtc').innerHTML =
+    t==='requests'?tabRequests(i): t==='breakdown'?tabBreakdown(i):
+    t==='cache'?tabCache(i): t==='compare'?tabCompare(i): tabOverview(i);
+};
+window.TOTAL_FRAMES = F.end;
+window.setFrame(0);
+</script>

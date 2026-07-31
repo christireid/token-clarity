@@ -1,0 +1,100 @@
+<meta charset="utf-8">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1000px;height:600px;overflow:hidden}
+  body{background:radial-gradient(900px 500px at 30% -10%,#241f45 0%,#12121a 60%,#0c0c12 100%);
+    display:flex;align-items:center;justify-content:center}
+  .win{width:940px;height:540px;border-radius:11px;overflow:hidden;background:#0f0f17;
+    border:1px solid #272736;box-shadow:0 26px 60px rgba(0,0,0,.6);display:flex;flex-direction:column}
+  .tb{height:32px;flex:0 0 32px;background:#1a1a25;border-bottom:1px solid #272736;
+    display:flex;align-items:center;gap:7px;padding:0 12px;
+    font:500 11px Inter;color:#6e6e85}
+  .dot{width:10px;height:10px;border-radius:50%}
+  .tb span.t{margin-left:8px}
+  .scr{flex:1;padding:16px 18px;font:400 13px/1.72 'JetBrains Mono',monospace;color:#c9c9db;overflow:hidden}
+  .ln{white-space:pre}
+  .p{color:#22c55e;font-weight:700}
+  .d{color:#5f5f78}
+  .g{color:#22c55e}.b{color:#60a5fa}.y{color:#f59e0b}.r{color:#ef4444}.m{color:#c084fc}
+  .w{color:#f2f2f8;font-weight:700}
+  .cur{display:inline-block;width:8px;height:15px;background:#22c55e;vertical-align:-3px}
+  .box{color:#4a4a60}
+</style>
+<div class="win">
+  <div class="tb">
+    <span class="dot" style="background:#ff5f57"></span>
+    <span class="dot" style="background:#febc2e"></span>
+    <span class="dot" style="background:#28c840"></span>
+    <span class="t">~/my-app — node</span>
+  </div>
+  <div class="scr" id="scr"></div>
+</div>
+<script>
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const P = '<span class="p">$</span> ';
+
+// [startFrame, endFrame, html]  — typed lines animate char-by-char on the raw text
+const CMD1 = 'npm install @token-optimizer/core @token-optimizer/react';
+const CMD2 = 'node estimate.mjs';
+
+const OUT1 = [
+  '<span class="d">  added 2 packages in 940ms</span>',
+  '<span class="d">  </span><span class="g">✓</span><span class="d"> @token-optimizer/core     9.4 kB gzipped</span>',
+  '<span class="d">  </span><span class="g">✓</span><span class="d"> @token-optimizer/react    4.6 kB gzipped</span>',
+  '',
+];
+const OUT2 = [
+  '<span class="box">┌─</span> <span class="w">prompt composition</span> <span class="box">──────────────────────────────────────</span>',
+  '<span class="box">│</span>  <span class="b">system</span>      1,240 tok   <span class="d">stable</span>      <span class="g">cacheable</span>',
+  '<span class="box">│</span>  <span class="m">tools</span>       2,180 tok   <span class="d">stable</span>      <span class="g">cacheable</span>',
+  '<span class="box">│</span>  <span class="g">context</span>    18,400 tok   <span class="d">stable</span>      <span class="g">cacheable</span>',
+  '<span class="box">│</span>  <span class="y">user</span>           96 tok   <span class="d">volatile</span>    <span class="d">fresh</span>',
+  '<span class="box">└─</span> <span class="d">total 21,916 tok  ·  cacheable prefix </span><span class="g">21,820 tok (99.6%)</span>',
+  '',
+  '<span class="box">┌─</span> <span class="w">estimateCost(\'gpt-4o\', 21916, 64)</span> <span class="box">──────────────────────</span>',
+  '<span class="box">│</span>  without cache alignment    <span class="r">$0.055430</span>',
+  '<span class="box">│</span>  with cache alignment       <span class="b">$0.028155</span>',
+  '<span class="box">│</span>  <span class="w">saved</span>                      <span class="g">$0.027275</span>  <span class="g">(49.2%)</span>',
+  '<span class="box">└─</span> <span class="d">× 10,000 requests/mo  →  </span><span class="g">$272.75 saved</span>',
+  '',
+  '<span class="d">  0 network calls · pricing table bundled · </span><span class="g">✓</span><span class="d"> 292 tests passing</span>',
+];
+
+const T = { c1:4, c1e:34, o1:38, c2:56, c2e:72, o2:76, end:150 };
+
+function typed(txt, i, s, e){
+  const n = Math.round(clamp((i-s)/(e-s),0,1)*txt.length);
+  return txt.slice(0,n);
+}
+
+window.setFrame = function(i){
+  let h = [];
+  // command 1
+  if(i >= T.c1){
+    const t = typed(CMD1, i, T.c1, T.c1e);
+    const cur = (i < T.c1e) ? '<span class="cur"></span>' : '';
+    h.push('<div class="ln">'+P+t+cur+'</div>');
+  }
+  // output 1
+  if(i >= T.o1){
+    const n = clamp(Math.floor((i-T.o1)/2),0,OUT1.length);
+    for(let k=0;k<n;k++) h.push('<div class="ln">'+OUT1[k]+'</div>');
+  }
+  // command 2
+  if(i >= T.c2){
+    const t = typed(CMD2, i, T.c2, T.c2e);
+    const cur = (i < T.c2e) ? '<span class="cur"></span>' : '';
+    h.push('<div class="ln">'+P+t+cur+'</div>');
+  }
+  // output 2
+  if(i >= T.o2){
+    const n = clamp(Math.floor((i-T.o2)/2),0,OUT2.length);
+    for(let k=0;k<n;k++) h.push('<div class="ln">'+OUT2[k]+'</div>');
+    if(n >= OUT2.length && (i % 12) < 7) h.push('<div class="ln">'+P+'<span class="cur"></span></div>');
+    else if(n >= OUT2.length) h.push('<div class="ln">'+P+'</div>');
+  }
+  document.getElementById('scr').innerHTML = h.join('');
+};
+window.TOTAL_FRAMES = T.end;
+window.setFrame(0);
+</script>

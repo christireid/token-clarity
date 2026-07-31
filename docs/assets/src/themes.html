@@ -1,0 +1,112 @@
+<meta charset="utf-8">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1120px;height:520px;overflow:hidden}
+  body{background:linear-gradient(120deg,#14141f 0%,#0d0d14 60%,#101018 100%);
+    font-family:Inter,system-ui,sans-serif;padding:26px 28px;display:flex;gap:24px;
+    -webkit-font-smoothing:antialiased}
+  .col{flex:1;display:flex;flex-direction:column}
+  .cap{font:600 10px Inter;letter-spacing:1.3px;text-transform:uppercase;color:#5f6579;margin-bottom:11px;
+    display:flex;align-items:center;gap:8px}
+  .cap code{font:500 10.5px 'JetBrains Mono';letter-spacing:0;text-transform:none;color:#8b91a8;
+    background:#1d1d29;border:1px solid #2a2a3a;padding:3px 7px;border-radius:5px}
+
+  .panel{border-radius:8px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:12px;
+    line-height:1.4;box-shadow:0 14px 40px rgba(0,0,0,.45)}
+  .ph{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid}
+  .ph .ti{display:flex;align-items:center;gap:8px;font:600 13px Inter}
+  .ph .st{display:flex;gap:12px;font-size:11px;align-items:center}
+  .pt{display:flex;border-bottom:1px solid;padding:0 8px}
+  .pt div{padding:9px 10px;font:500 10.5px Inter;letter-spacing:.6px;text-transform:uppercase;
+    border-bottom:2px solid transparent}
+  .pc{padding:12px}
+  .h{font:600 10.5px Inter;letter-spacing:.6px;text-transform:uppercase;opacity:.75;margin-bottom:8px}
+  .g{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .s{border-radius:5px;padding:9px 10px;display:flex;flex-direction:column;gap:2px}
+  .s .l{font:500 9.5px Inter;letter-spacing:.5px;text-transform:uppercase;opacity:.75}
+  .s .v{font:700 17px 'JetBrains Mono';letter-spacing:-.5px}
+  .s .x{font:400 9.5px 'JetBrains Mono';opacity:.7}
+  .sect{margin-bottom:14px}
+  .br{display:flex;justify-content:space-between;font-size:11px;padding:4px 0}
+  .pg{height:5px;border-radius:3px;overflow:hidden}
+  .pg i{display:block;height:100%;border-radius:3px}
+
+  /* dark */
+  .dark .panel{background:#1e1e2e;color:#e0e0e0;border:1px solid #3a3a4e}
+  .dark .ph{background:#2a2a3e;border-color:#3a3a4e}
+  .dark .pt{border-color:#3a3a4e;background:#1e1e2e}
+  .dark .pt div{color:#a0a0b0}
+  .dark .pt div.on{color:#3b82f6;border-bottom-color:#3b82f6}
+  .dark .s{background:#2a2a3e}
+  .dark .h,.dark .s .l,.dark .s .x{color:#a0a0b0}
+  .dark .pg{background:#3a3a4e}
+  .dark .br span:first-child{color:#a0a0b0}
+
+  /* light */
+  .light .panel{background:#ffffff;color:#1a1a2e;border:1px solid #e0e0e0}
+  .light .ph{background:#f5f5f5;border-color:#e0e0e0}
+  .light .pt{border-color:#e0e0e0;background:#fff}
+  .light .pt div{color:#6b6b7b}
+  .light .pt div.on{color:#3b82f6;border-bottom-color:#3b82f6}
+  .light .s{background:#f5f5f5}
+  .light .h,.light .s .l,.light .s .x{color:#6b6b7b}
+  .light .pg{background:#ebebeb}
+  .light .br span:first-child{color:#6b6b7b}
+</style>
+<body>
+
+<div class="col dark">
+  <div class="cap">Dark theme <code>themeMode="dark"</code></div>
+  <div class="panel">
+    <div class="ph"><div class="ti"><span>🪙</span><span>Token Devtools</span></div>
+      <div class="st"><b>$0.9053</b><span>552.4K tok</span><span>↘</span></div></div>
+    <div class="pt"><div class="on">Overview</div><div>Requests</div><div>Breakdown</div><div>Cache</div><div>Compare</div></div>
+    <div class="pc">
+      <div class="sect"><div class="h">Session Overview</div><div class="g">
+        <div class="s"><span class="l">Requests</span><span class="v">128</span></div>
+        <div class="s"><span class="l">Total Cost</span><span class="v" style="color:#3b82f6">$0.9053</span></div>
+        <div class="s"><span class="l">Tokens Used</span><span class="v">552.4K</span><span class="x">455.9K in / 96.5K out</span></div>
+        <div class="s"><span class="l">Savings</span><span class="v" style="color:#22c55e">$2.0381</span><span class="x">361.6K cached</span></div>
+      </div></div>
+      <div class="sect"><div class="h">Performance</div><div class="g">
+        <div class="s"><span class="l">Avg Latency</span><span class="v">990ms</span></div>
+        <div class="s"><span class="l">Cache Hit Rate</span><span class="v" style="color:#22c55e">74.3%</span></div>
+      </div></div>
+      <div class="sect"><div class="h">Budget</div>
+        <div class="br"><span>Daily</span><span>$1.52 / $10.00</span></div>
+        <div class="pg"><i style="width:15.2%;background:#3b82f6"></i></div>
+        <div class="br" style="margin-top:7px"><span>Monthly</span><span style="color:#f59e0b">$42.11 / $200.00</span></div>
+        <div class="pg"><i style="width:21%;background:#f59e0b"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col light">
+  <div class="cap">Light theme <code>themeMode="light" | "auto"</code></div>
+  <div class="panel">
+    <div class="ph"><div class="ti"><span>🪙</span><span>Token Devtools</span></div>
+      <div class="st"><b>$0.9053</b><span>552.4K tok</span><span>↘</span></div></div>
+    <div class="pt"><div class="on">Overview</div><div>Requests</div><div>Breakdown</div><div>Cache</div><div>Compare</div></div>
+    <div class="pc">
+      <div class="sect"><div class="h">Session Overview</div><div class="g">
+        <div class="s"><span class="l">Requests</span><span class="v">128</span></div>
+        <div class="s"><span class="l">Total Cost</span><span class="v" style="color:#3b82f6">$0.9053</span></div>
+        <div class="s"><span class="l">Tokens Used</span><span class="v">552.4K</span><span class="x">455.9K in / 96.5K out</span></div>
+        <div class="s"><span class="l">Savings</span><span class="v" style="color:#16a34a">$2.0381</span><span class="x">361.6K cached</span></div>
+      </div></div>
+      <div class="sect"><div class="h">Performance</div><div class="g">
+        <div class="s"><span class="l">Avg Latency</span><span class="v">990ms</span></div>
+        <div class="s"><span class="l">Cache Hit Rate</span><span class="v" style="color:#16a34a">74.3%</span></div>
+      </div></div>
+      <div class="sect"><div class="h">Budget</div>
+        <div class="br"><span>Daily</span><span>$1.52 / $10.00</span></div>
+        <div class="pg"><i style="width:15.2%;background:#3b82f6"></i></div>
+        <div class="br" style="margin-top:7px"><span>Monthly</span><span style="color:#d97706">$42.11 / $200.00</span></div>
+        <div class="pg"><i style="width:21%;background:#d97706"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>window.TOTAL_FRAMES=1;window.setFrame=()=>{};</script>
